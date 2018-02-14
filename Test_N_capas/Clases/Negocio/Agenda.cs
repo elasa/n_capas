@@ -8,13 +8,13 @@ using System.Web;
 
 namespace Test_N_capas.Clases.Negocio
 {
-    public class Agenda : Entidad.AgendaEntidad
+    public class Agenda : Entidad.Telefono
     {
         Conexion conexion = new Conexion();
 
         public Agenda()
         {
-            
+
         }
 
         public DataTable getTablaAgenda()
@@ -87,5 +87,23 @@ namespace Test_N_capas.Clases.Negocio
             return conexion.getCount(sb.ToString()); // revisar consulta....zzz..
         }
 
+        //ddl cascada pais ciudad 
+
+        public DataTable get_pais_cascade()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("select id,nombre from Pais where estado='Activo'");
+            DataTable dt = conexion.getDataTable(sb.ToString());
+            return dt;
+        }
+
+        public DataTable get_ciudad_cascade(int idpais)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("select id, nombre from Ciudad where idPais="+ idpais + "");
+            sb.AppendLine("and estado='Activo'");
+            DataTable dt = conexion.getDataTable(sb.ToString());
+            return dt;
+        }
     }
 }

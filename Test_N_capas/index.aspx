@@ -92,7 +92,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label>Telefono:</label>
-                                        <asp:TextBox ID="txtTelefono" runat="server" CssClass="form-control"></asp:TextBox>
+                                        <asp:TextBox ID="txtTelefono" runat="server" ReadOnly="true" CssClass="form-control"></asp:TextBox>
                                     </div>
                                     <div class="form-group">
                                         <label>Estado:</label>
@@ -134,6 +134,21 @@
                                         <label>Usuario:</label>
                                         <asp:DropDownList ID="ddlAddUsuario" runat="server" CssClass="form-control"></asp:DropDownList>
                                     </div>
+                                    <asp:UpdatePanel runat="server">
+                                        <ContentTemplate>
+                                            <div class="form-group">
+                                                <label>Pais:</label>
+                                                <asp:DropDownList ID="ddlAddPais" runat="server" CssClass="form-control" OnSelectedIndexChanged="ddlAddPais_SelectedIndexChanged" AutoPostBack="true">
+                                                </asp:DropDownList>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Ciudad:</label>
+                                                <asp:DropDownList ID="ddlAddCiudad" runat="server" CssClass="form-control" AutoPostBack="true">
+                                                    <asp:ListItem Value="0" Text="-Seleccione ciudad-"></asp:ListItem>
+                                                </asp:DropDownList>
+                                            </div>
+                                        </ContentTemplate>
+                                    </asp:UpdatePanel>
                                     <div class="form-group">
                                         <label>Estado:</label>
                                         <asp:DropDownList ID="ddlAddEstado" runat="server" CssClass="form-control">

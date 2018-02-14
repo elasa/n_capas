@@ -65,6 +65,7 @@
   <ItemGroup>
     <Compile Include="Clases\Conexion.cs" />
     <Compile Include="Clases\Entidad\AgendaEntidad.cs" />
+    <Compile Include="Clases\Entidad\Telefono.cs" />
     <Compile Include="Clases\Funciones.cs" />
     <Compile Include="Clases\Negocio\Agenda.cs" />
     <Compile Include="index.aspx.cs">

@@ -98,30 +98,67 @@ namespace Test_N_capas
             ddlAddUsuario.DataValueField = "id";
             ddlAddUsuario.DataTextField = "nombre";
             ddlAddUsuario.DataBind();
+
+            //llenar ddlAddPais 
+            ddlAddPais.DataSource = agenda.get_pais_cascade();
+            ddlAddPais.DataValueField = "id";
+            ddlAddPais.DataTextField = "nombre";
+            ddlAddPais.DataBind();
+            ddlAddPais.Items.Insert(0, new ListItem("-Selecione país-", "0"));
         }
+
+        //protected void btnAgregar_Click(object sender, EventArgs e)
+        //{
+        //    string tel = txtAddTelefono.Text;
+        //    string idu = ddlAddUsuario.SelectedValue;
+        //    string nombre = ddlAddUsuario.SelectedItem.Text;
+        //    string estado = ddlAddEstado.SelectedItem.Text;
+        //    int idUsuario = int.Parse(idu);
+
+        //    int telefono = (String.IsNullOrEmpty(tel)) ? 0  : int.Parse(tel);
+
+        //    Agenda agenda = new Agenda();
+
+        //    if (agenda.telefonoExiste(telefono)>0)
+        //    {
+        //        ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "existe", "alert('Ya existe un usuario con ese teléfono')", true);
+        //    }
+        //    else
+        //    {
+        //        if (telefono > 0)
+        //        {
+
+        //            agenda.addTelefono(idUsuario, telefono, estado);
+        //        }
+        //        else
+        //        {
+        //            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "vaalida", "alert('Debe ingresar un telefono valido')", true);
+
+        //        }
+        //    }
+
+        //    load_gv();
+        //}
 
         protected void btnAgregar_Click(object sender, EventArgs e)
         {
+            Agenda age = new Agenda();
+
             string tel = txtAddTelefono.Text;
-            string idu = ddlAddUsuario.SelectedValue;
-            string nombre = ddlAddUsuario.SelectedItem.Text;
-            string estado = ddlAddEstado.SelectedItem.Text;
-            int idUsuario = int.Parse(idu);
+            age.Telefonos = (String.IsNullOrEmpty(tel)) ? 0 : int.Parse(tel);
+            age.IdUsuario = int.Parse(ddlAddUsuario.SelectedValue);
+            age.Estado = ddlAddEstado.SelectedItem.Text;
 
-            int telefono = (String.IsNullOrEmpty(tel)) ? 0  : int.Parse(tel);
-            
-            Agenda agenda = new Agenda();
-
-            if (agenda.telefonoExiste(telefono)>0)
+            if (age.telefonoExiste(age.Telefonos) > 0)
             {
                 ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "existe", "alert('Ya existe un usuario con ese teléfono')", true);
             }
             else
             {
-                if (telefono > 0)
+                if (age.Telefonos > 0)
                 {
 
-                    agenda.addTelefono(idUsuario, telefono, estado);
+                    age.addTelefono(age.IdUsuario, age.Telefonos, age.Estado);
                 }
                 else
                 {
@@ -131,6 +168,17 @@ namespace Test_N_capas
             }
 
             load_gv();
+        }
+
+        protected void ddlAddPais_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            int idpais = int.Parse(ddlAddPais.SelectedValue);
+            Agenda agenda = new Agenda();
+
+            ddlAddCiudad.DataSource = agenda.get_ciudad_cascade(idpais);
+            ddlAddCiudad.DataValueField = "id";
+            ddlAddCiudad.DataTextField = "nombre";
+            ddlAddCiudad.DataBind();
         }
 
         public void load_gv()
