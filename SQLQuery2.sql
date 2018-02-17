@@ -1,14 +1,22 @@
-﻿select u.nombre,t.numeroTelefono,t.estado from Telefono as t left join Usuario as u on t.idUsuario = u.Id
+﻿
+
+select t.Id as ID, t.numeroTelefono as Telefono, t.idUsuario as idUsuario, 
+ISNULL( u.nombre,'No asignado') as Nombres, u.correo as 'Correo electónico'
+from Telefono as t left join Usuario as u on t.idUsuario = u.Id
+where t.estado='Activo'
+
+select t.Id as ID, t.numeroTelefono as Telefono, t.idUsuario as idUsuario, 
+u.nombre as Nombres, u.correo as 'Correo electónico'
+from Telefono as t left join Usuario as u on t.idUsuario = u.Id
+where t.estado='Activo'
+select count(*) from Telefono
+
+truncate table Telefono
 
 select * from Telefono
+select count(*) from Telefono where numeroTelefono=3
 
 
---insert into Usuario(nombre,correo) values('Romina Asencio','rasencio@gmail.com')
-select * from Usuario
 
-update Usuario set nombre='Marcela Jimenez', correo='mjimenex@gmail.com' where id=6
-
---update Telefono set estado ='Activo'
-
-select count(*) from Telefono as t left join Usuario as u on t.idUsuario = u.Id
-where u.nombre ='Martin Carcamo' and t.numeroTelefono=212223 and t.estado='Activo'
+--INSERT INTO telefono(idUsuario, numeroTelefono, estado, idPais, idCiudad)
+--VALUES(NULL,4,'Activo',NULL,NULL)

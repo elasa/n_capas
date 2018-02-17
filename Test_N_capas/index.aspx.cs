@@ -90,7 +90,12 @@ namespace Test_N_capas
 
         protected void btn_agregar_Click(object sender, EventArgs e)
         {
-            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "modalEliminarConfirm", "$('#modalAgregar').modal('toggle')", true);
+            txtAddTelefono.Text = String.Empty;
+            ddlAddUsuario.Items.Clear();
+            ddlAddPais.Items.Clear();
+            ddlAddCiudad.Items.Clear();
+
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "modalAgregar", "$('#modalAgregar').modal('toggle')", true);
 
             Agenda agenda = new Agenda();
             //llenar ddlAddUsuario
@@ -98,74 +103,27 @@ namespace Test_N_capas
             ddlAddUsuario.DataValueField = "id";
             ddlAddUsuario.DataTextField = "nombre";
             ddlAddUsuario.DataBind();
+            ddlAddUsuario.Items.Insert(0, new ListItem("Seleccione usuario", "0"));
 
             //llenar ddlAddPais 
             ddlAddPais.DataSource = agenda.get_pais_cascade();
             ddlAddPais.DataValueField = "id";
             ddlAddPais.DataTextField = "nombre";
             ddlAddPais.DataBind();
-            ddlAddPais.Items.Insert(0, new ListItem("-Selecione país-", "0"));
+            ddlAddPais.Items.Insert(0, new ListItem("-Seleccione país-", "0"));
+            ddlAddCiudad.Items.Insert(0, new ListItem("-Seleccione ciudad","0"));
         }
-
-        //protected void btnAgregar_Click(object sender, EventArgs e)
-        //{
-        //    string tel = txtAddTelefono.Text;
-        //    string idu = ddlAddUsuario.SelectedValue;
-        //    string nombre = ddlAddUsuario.SelectedItem.Text;
-        //    string estado = ddlAddEstado.SelectedItem.Text;
-        //    int idUsuario = int.Parse(idu);
-
-        //    int telefono = (String.IsNullOrEmpty(tel)) ? 0  : int.Parse(tel);
-
-        //    Agenda agenda = new Agenda();
-
-        //    if (agenda.telefonoExiste(telefono)>0)
-        //    {
-        //        ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "existe", "alert('Ya existe un usuario con ese teléfono')", true);
-        //    }
-        //    else
-        //    {
-        //        if (telefono > 0)
-        //        {
-
-        //            agenda.addTelefono(idUsuario, telefono, estado);
-        //        }
-        //        else
-        //        {
-        //            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "vaalida", "alert('Debe ingresar un telefono valido')", true);
-
-        //        }
-        //    }
-
-        //    load_gv();
-        //}
 
         protected void btnAgregar_Click(object sender, EventArgs e)
         {
-            Agenda age = new Agenda();
+            Agenda agenda = new Agenda();
 
-            string tel = txtAddTelefono.Text;
-            age.Telefonos = (String.IsNullOrEmpty(tel)) ? 0 : int.Parse(tel);
-            age.IdUsuario = int.Parse(ddlAddUsuario.SelectedValue);
-            age.Estado = ddlAddEstado.SelectedItem.Text;
-
-            if (age.telefonoExiste(age.Telefonos) > 0)
-            {
-                ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "existe", "alert('Ya existe un usuario con ese teléfono')", true);
-            }
-            else
-            {
-                if (age.Telefonos > 0)
-                {
-
-                    age.addTelefono(age.IdUsuario, age.Telefonos, age.Estado);
-                }
-                else
-                {
-                    ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "vaalida", "alert('Debe ingresar un telefono valido')", true);
-
-                }
-            }
+            agenda.Telefonos = (String.IsNullOrEmpty(txtAddTelefono.Text)) ? 0 : int.Parse(txtAddTelefono.Text);
+            agenda.IdUsuario = int.Parse(ddlAddUsuario.SelectedValue);
+            agenda.Estado = "Activo";
+            agenda.IdPais = (String.IsNullOrEmpty(ddlAddPais.SelectedValue.ToString()) ? 0 : int.Parse(ddlAddPais.SelectedValue.ToString()));
+            agenda.IdCiudad = (String.IsNullOrEmpty(ddlAddCiudad.SelectedValue.ToString()) ? 0 : int.Parse(ddlAddCiudad.SelectedValue.ToString()));
+            agenda.insert();
 
             load_gv();
         }

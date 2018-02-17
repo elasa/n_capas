@@ -14,9 +14,6 @@ namespace agenda
         public Conexion()
         {
             connectionString = ConfigurationManager.ConnectionStrings["agenda"].ConnectionString;
-            //connectionString = ConfigurationManager.ConnectionStrings["localCASA"].ConnectionString;
-            //connectionString = ConfigurationManager.ConnectionStrings["Connection175"].ConnectionString;
-            //connectionString = ConfigurationManager.ConnectionStrings["Connection176"].ConnectionString;
         }
 
         public DataTable getDataTable(string query)
