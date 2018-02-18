@@ -27,6 +27,10 @@
                             <asp:BoundField DataField="Telefono" HeaderText="Teléfono" />
                             <asp:BoundField DataField="idUsuario" HeaderText="ID Ususario" />
                             <asp:BoundField DataField="Nombres" HeaderText="Nombres" />
+                            <asp:BoundField DataField="IdPais" HeaderText="ID Pais" />
+                            <asp:BoundField DataField="Pais" HeaderText="Pais" />
+                            <asp:BoundField DataField="IdCiudad" HeaderText="ID Ciudad" />
+                            <asp:BoundField DataField="Ciudad" HeaderText="Ciudad" />
                             <asp:TemplateField HeaderText="Operaciones" ItemStyle-Wrap="false">
                                 <ItemTemplate>
                                     <asp:Button ID="btn_editar" runat="server" Text="Editar" OnClick="btn_editar_Click" CssClass="btn btn-primary" />
@@ -87,12 +91,22 @@
                                     <h3>Editar Teléfono</h3>
                                     <!--<asp:Label ID="lblEditar" runat="server" Text="MI ID es"></asp:Label>-->
                                     <div class="form-group">
+                                        <label>Telefono:</label>
+                                        <asp:TextBox ID="txtTelefono" runat="server" ReadOnly="true" CssClass="form-control"></asp:TextBox>
+                                    </div>
+                                    <div class="form-group">
                                         <label>Usuario:</label>
                                         <asp:DropDownList ID="ddlUsusarios" runat="server" CssClass="form-control"></asp:DropDownList>
                                     </div>
                                     <div class="form-group">
-                                        <label>Telefono:</label>
-                                        <asp:TextBox ID="txtTelefono" runat="server" ReadOnly="true" CssClass="form-control"></asp:TextBox>
+                                        <label>Pais:</label>
+                                        <asp:DropDownList ID="ddlEditPais" runat="server" CssClass="form-control" OnSelectedIndexChanged="ddlEditPais_SelectedIndexChanged" AutoPostBack="true">
+                                        </asp:DropDownList>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Ciudad:</label>
+                                        <asp:DropDownList ID="ddlEditCiudad" runat="server" CssClass="form-control" AutoPostBack="true">
+                                        </asp:DropDownList>
                                     </div>
                                     <div class="form-group">
                                         <label>Estado:</label>
@@ -142,7 +156,6 @@
                                     <div class="form-group">
                                         <label>Ciudad:</label>
                                         <asp:DropDownList ID="ddlAddCiudad" runat="server" CssClass="form-control" AutoPostBack="true">
-                                            <asp:ListItem Value="0" Text="-Seleccione ciudad-"></asp:ListItem>
                                         </asp:DropDownList>
                                     </div>
                                 </ContentTemplate>

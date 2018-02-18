@@ -1,4 +1,5 @@
-﻿using System;
+﻿using agenda;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -20,70 +21,71 @@ namespace Test_N_capas
 
         protected void btn_editar_Click(object sender, EventArgs e)
         {
-            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "modalEliminarConfirm", "$('#modalEditar').modal('toggle')", true);
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "modalEditar", "$('#modalEditar').modal('toggle')", true);
+
+            ddlUsusarios.Items.Clear();
+           
+            ddlEditCiudad.Items.Clear();
+
+            Agenda agenda = new Agenda();
+
             Button btn = (Button)sender;
             GridViewRow row = (GridViewRow)btn.NamingContainer;
             string id = row.Cells[0].Text;
             string telefono = row.Cells[1].Text;
             string idUsuario = row.Cells[2].Text;
             string nombres = row.Cells[3].Text;
+            int idPais = (String.IsNullOrEmpty(row.Cells[4].Text.ToString()) || row.Cells[4].Text.Equals("&nbsp;") ? 0 : int.Parse(row.Cells[4].Text));
+            string pais = row.Cells[5].Text;
+            string idCiudad = row.Cells[6].Text;
+            string ciudad = row.Cells[7].Text;
+
+            string estado = ddlEstado.SelectedValue;
+
             hdnID.Value = id;
             lblEditar.Text = id;
-       
-            Agenda agenda = new Agenda();
+
+            txtTelefono.Text = telefono;
+
             //llenar ddlUsuarios
             ddlUsusarios.DataSource = agenda.getUsusrios();
             ddlUsusarios.DataValueField = "id";
             ddlUsusarios.DataTextField = "nombre";
             ddlUsusarios.DataBind();
-            ddlUsusarios.SelectedValue = idUsuario;
-            
-            txtTelefono.Text = telefono;
-            ddlEstado.SelectedValue = "1";
+            ddlUsusarios.Items.Insert(0, new ListItem("-Seleccione usuario-", "0"));
+            ddlUsusarios.SelectedValue = (String.IsNullOrEmpty(idUsuario) || idUsuario.Equals("&nbsp;") ? "0" : idUsuario);
+
+            //lenar ddllEditPais
+            ddlEditPais.DataSource = agenda.get_pais_cascade();
+            ddlEditPais.DataValueField = "id";
+            ddlEditPais.DataTextField = "nombre";
+            ddlEditPais.DataBind();
+            ddlEditPais.Items.Insert(0, new ListItem("-Seleccione pais-", "0"));
+            ddlEditPais.SelectedValue = (String.IsNullOrEmpty(idPais.ToString()) || idPais.Equals("&nbsp;") ? "0" : idPais.ToString());
+            int paisSelected = int.Parse(ddlEditPais.SelectedValue);
+
+            //llenar ddlEditCiudad
+            ddlEditCiudad.DataSource = agenda.get_ciudad_cascade(idPais);
+            ddlEditCiudad.DataValueField = "id";
+            ddlEditCiudad.DataTextField = "nombre";
+            ddlEditCiudad.DataBind();
+            ddlEditCiudad.SelectedValue = (String.IsNullOrEmpty(idCiudad) || idCiudad.Equals("&nbsp;") ? "0" : idCiudad);
+
+            ddlEstado.SelectedValue = estado;
         }
 
         protected void btnEditar_Click(object sender, EventArgs e)
         {
-            string idh = hdnID.Value;
-            int id = int.Parse(idh);
-            string nombre = ddlUsusarios.SelectedValue;
-            int idUsuario = int.Parse(nombre);
-            string tel = txtTelefono.Text;
-            int telefono = int.Parse(tel);
-            string estado = ddlEstado.SelectedItem.Text;
-            Agenda agenda = new Agenda();
+            int id  = int.Parse(hdnID.Value);
 
-            if (agenda.telefonoExiste(telefono) > 0)
-            {
-                ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "telExiste", "alert('Se actualizo el telefono para el usuario "+nombre+"')", true);
-                agenda.updateTelefonoExiste(id, idUsuario, estado);
-            }
-            else
-            {
-                agenda.updateTelefono(id, idUsuario, telefono, estado);
-            }
-                
+            Agenda agenda = new Agenda(id);
 
-            load_gv();
-        }
-
-        protected void btn_eliminar_Click(object sender, EventArgs e)
-        {
-            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "modalEliminarConfirm", "$('#modalEliminar').modal('toggle')", true);
-            Button btn = (Button)sender;
-            GridViewRow row = (GridViewRow)btn.NamingContainer;
-            string id = row.Cells[0].Text;
-            string telefono = row.Cells[1].Text;
-            hdnID.Value = id;
-            lblTest.Text = telefono;
-        }
-
-        protected void btnEliminar_Click(object sender, EventArgs e)
-        {
-            string idh = hdnID.Value;
-            int id = int.Parse(idh);
-            Agenda agenda = new Agenda();
-            agenda.updateEstado(id, "Inactivo");
+            agenda.Telefonos = int.Parse(txtTelefono.Text);
+            agenda.IdUsuario = int.Parse(ddlUsusarios.SelectedValue);
+            agenda.Estado = ddlEstado.SelectedItem.Text;
+            agenda.IdPais = int.Parse(ddlEditPais.SelectedValue);
+            agenda.IdCiudad = (String.IsNullOrEmpty(ddlEditCiudad.SelectedValue.ToString()) || ddlEditCiudad.SelectedValue.ToString().Equals("&nbsp;") ? 0 : int.Parse(ddlEditCiudad.SelectedValue.ToString()));
+            agenda.update();
 
             load_gv();
         }
@@ -128,6 +130,27 @@ namespace Test_N_capas
             load_gv();
         }
 
+        protected void btn_eliminar_Click(object sender, EventArgs e)
+        {
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "modalEliminarConfirm", "$('#modalEliminar').modal('toggle')", true);
+            Button btn = (Button)sender;
+            GridViewRow row = (GridViewRow)btn.NamingContainer;
+            string id = row.Cells[0].Text;
+            string telefono = row.Cells[1].Text;
+            hdnID.Value = id;
+            lblTest.Text = telefono;
+        }
+
+        protected void btnEliminar_Click(object sender, EventArgs e)
+        {
+            string idh = hdnID.Value;
+            int id = int.Parse(idh);
+            Agenda agenda = new Agenda();
+            agenda.updateEstado(id, "Inactivo");
+
+            load_gv();
+        }
+
         protected void ddlAddPais_SelectedIndexChanged(object sender, EventArgs e)
         {
             int idpais = int.Parse(ddlAddPais.SelectedValue);
@@ -139,16 +162,31 @@ namespace Test_N_capas
             ddlAddCiudad.DataBind();
         }
 
+        protected void ddlEditPais_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            int idpais = int.Parse(ddlEditPais.SelectedValue);
+
+            Agenda agenda = new Agenda();
+
+            ddlEditCiudad.DataSource = agenda.get_ciudad_cascade(idpais);
+            ddlEditCiudad.DataValueField = "id";
+            ddlEditCiudad.DataTextField = "nombre";
+            ddlEditCiudad.DataBind();
+        }
+
+        protected void gv_index_PreRender(object sender, EventArgs e)
+        {
+            Funciones.VisibilidadColumna(gv_index, 0, false);
+            Funciones.VisibilidadColumna(gv_index, 2, false);
+            Funciones.VisibilidadColumna(gv_index, 4, false);
+            Funciones.VisibilidadColumna(gv_index, 6, false);
+        }
+
         public void load_gv()
         {
             Agenda agenda = new Agenda();
             gv_index.DataSource = agenda.getTablaAgenda();
             gv_index.DataBind();
-        }
-
-        protected void gv_index_PreRender(object sender, EventArgs e)
-        {
-            
         }
     }
 }

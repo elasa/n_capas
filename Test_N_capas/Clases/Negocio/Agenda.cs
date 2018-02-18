@@ -36,9 +36,11 @@ namespace Test_N_capas.Clases.Negocio
             {
                 DataRow row = dt.Rows[0];
 
-                if (Id != 0 && IdUsuario != 0 && Telefonos != 0 && !String.IsNullOrEmpty(Estado) && IdPais != 0 && IdCiudad != 0)
+                Id = int.Parse(row["id"].ToString());
+
+                if (IdUsuario != 0 && Telefonos != 0 && !String.IsNullOrEmpty(Estado) && IdPais != 0 && IdCiudad != 0)
                 {
-                    Id = int.Parse(row["id"].ToString());
+         
                     IdUsuario = int.Parse(row["idUsuario"].ToString());
                     Telefonos = int.Parse(row["numeroTelefono"].ToString());
                     Estado = row["estado"].ToString();
@@ -48,9 +50,58 @@ namespace Test_N_capas.Clases.Negocio
             }
         }
 
-        public void save()
+        public void update()
         {
-            conexion.updateQuery("UPDATE telefono SET idUsuario=" + IdUsuario + ",numeroTelefono=" + Telefonos + ",estado='" + Estado + "' WHERE id="+Id+"");
+            StringBuilder sb = new StringBuilder();
+
+            if (IdUsuario != 0 && Telefonos != 0 && !String.IsNullOrEmpty(Estado) && IdPais != 0 && IdCiudad != 0)
+            {
+                sb.AppendLine("UPDATE telefono");
+                sb.AppendLine("SET idUsuario=" + IdUsuario + ",numeroTelefono=" + Telefonos + ",estado='" + Estado + "', idPais=" + IdPais + ", idCiudad=" + IdCiudad + "");
+                sb.AppendLine("WHERE id=" + Id);
+                conexion.updateQuery(sb.ToString());
+            }
+            else
+            {
+                sb.AppendLine("UPDATE telefono SET idUsuario=");
+
+                if(IdUsuario == 0)
+                {
+                    sb.Append("NULL");
+                }
+                else
+                {
+                    sb.Append(IdUsuario.ToString());
+                }
+
+                sb.AppendLine(", numeroTelefono="+Telefonos+", estado='"+Estado+"',idPais=");
+
+                if(IdPais == 0){
+
+                    sb.Append("NULL");
+                }
+                else
+{
+                    sb.Append(IdPais.ToString());
+                }
+
+                sb.AppendLine(", idCiudad=");
+                
+                if(IdCiudad == 0)
+                {
+                    sb.Append("NULL");
+                }
+                else
+                {
+                    sb.Append(IdCiudad.ToString());
+                }
+
+                sb.AppendLine(" WHERE id="+Id+"");
+
+                conexion.updateQuery(sb.ToString());
+            }
+                
+            
         }
 
         public void insert()
@@ -111,9 +162,13 @@ namespace Test_N_capas.Clases.Negocio
         public DataTable getTablaAgenda()
         {
             StringBuilder sb = new StringBuilder();
-            sb.AppendLine("select t.Id as ID, t.numeroTelefono as Telefono, t.idUsuario as idUsuario, ISNULL(u.nombre,'No asignado') as Nombres, u.correo as 'Correo electónico'");
-            sb.AppendLine("from Telefono as t left join Usuario as u on t.idUsuario = u.Id");
-            sb.AppendLine("where t.estado='Activo'");
+            sb.AppendLine("SELECT t.Id AS ID, t.numeroTelefono AS Telefono, t.idUsuario AS idUsuario, ISNULL(u.nombre,'No asignado') AS Nombres, t.idPais AS IdPais, p.nombre AS Pais, t.idCiudad AS IdCiudad, c.nombre AS Ciudad");
+            sb.AppendLine("FROM Telefono AS t LEFT JOIN Usuario AS u ON t.idUsuario = u.Id");
+            sb.AppendLine("LEFT JOIN Pais AS p ON t.idPais = p.Id");
+            sb.AppendLine("LEFT JOIN Ciudad AS c ON t.idCiudad = c.Id");
+            sb.AppendLine("WHERE t.estado='Activo'");
+            sb.AppendLine("ORDER BY t.id ASC");
+
 
             DataTable dt = conexion.getDataTable(sb.ToString());
             return dt;

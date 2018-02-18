@@ -76,6 +76,15 @@ namespace Test_N_capas {
         protected global::System.Web.UI.WebControls.Label lblEditar;
         
         /// <summary>
+        /// Control txtTelefono.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtTelefono;
+        
+        /// <summary>
         /// Control ddlUsusarios.
         /// </summary>
         /// <remarks>
@@ -85,13 +94,22 @@ namespace Test_N_capas {
         protected global::System.Web.UI.WebControls.DropDownList ddlUsusarios;
         
         /// <summary>
-        /// Control txtTelefono.
+        /// Control ddlEditPais.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtTelefono;
+        protected global::System.Web.UI.WebControls.DropDownList ddlEditPais;
+        
+        /// <summary>
+        /// Control ddlEditCiudad.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlEditCiudad;
         
         /// <summary>
         /// Control ddlEstado.

@@ -7,6 +7,7 @@ namespace Test_N_capas.Clases.Entidad
 {
     public class Telefono
     {
+        #region propiedades de la clase
 
         public int Id { get; set; } = 0;
         public int IdUsuario { get; set; } = 0;
@@ -14,6 +15,9 @@ namespace Test_N_capas.Clases.Entidad
         public string Estado { get; set; } = "Activo";
         public int IdPais { get; set; } = 0;
         public int IdCiudad { get; set; } = 0;
+
+        #endregion
+
     }
 
 
