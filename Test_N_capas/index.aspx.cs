@@ -143,10 +143,11 @@ namespace Test_N_capas
 
         protected void btnEliminar_Click(object sender, EventArgs e)
         {
-            string idh = hdnID.Value;
-            int id = int.Parse(idh);
-            Agenda agenda = new Agenda();
-            agenda.updateEstado(id, "Inactivo");
+            int id = int.Parse(hdnID.Value);
+
+            Agenda agenda = new Agenda(id);
+            agenda.Estado = "Inactivo";
+            agenda.update();
 
             load_gv();
         }

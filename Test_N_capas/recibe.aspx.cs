@@ -40,9 +40,8 @@ namespace Test_N_capas
             int idUsuarioInt = Int32.Parse(ddlUsuarios.SelectedValue.ToString());
             int telefono = Int32.Parse(txtTelefono.Text);
 
-            agenda.updateTelefono(id,idUsuarioInt,telefono,"Activo");
+            //agenda.updateTelefono(id,idUsuarioInt,telefono,"Activo");
             Response.Redirect("index.aspx");
-
         }
 
         protected void btnCancel_Click(object sender, EventArgs e)

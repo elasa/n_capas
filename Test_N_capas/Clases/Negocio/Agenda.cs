@@ -29,7 +29,6 @@ namespace Test_N_capas.Clases.Negocio
 
         public Agenda(int id)
         {
-
             DataTable dt = conexion.getDataTable("SELECT id, idUsuario, numeroTelefono, estado, idPais, idCiudad FROM telefono WHERE id=" + id);
 
             if (dt.Rows.Count > 0)
@@ -38,14 +37,17 @@ namespace Test_N_capas.Clases.Negocio
 
                 Id = int.Parse(row["id"].ToString());
 
-                if (IdUsuario != 0 && Telefonos != 0 && !String.IsNullOrEmpty(Estado) && IdPais != 0 && IdCiudad != 0)
+                if(Id != 0)
                 {
-         
-                    IdUsuario = int.Parse(row["idUsuario"].ToString());
+                    var idUsuario = row["idUsuario"].ToString();
+                    var idPais = row["idPais"].ToString();
+                    var idCiudad = row["idCiudad"].ToString();
+
+                    IdUsuario = (String.IsNullOrEmpty(idUsuario.ToString()) ? 0 : int.Parse(idUsuario.ToString()));
                     Telefonos = int.Parse(row["numeroTelefono"].ToString());
                     Estado = row["estado"].ToString();
-                    IdPais = int.Parse(row["idPais"].ToString());
-                    IdCiudad = int.Parse(row["idCiudad"].ToString());
+                    IdPais = (String.IsNullOrEmpty(idPais.ToString()) ? 0 : int.Parse(idPais.ToString()));
+                    IdCiudad = (String.IsNullOrEmpty(idCiudad.ToString()) ? 0 : int.Parse(idCiudad.ToString()));
                 }
             }
         }
@@ -56,9 +58,9 @@ namespace Test_N_capas.Clases.Negocio
 
             if (IdUsuario != 0 && Telefonos != 0 && !String.IsNullOrEmpty(Estado) && IdPais != 0 && IdCiudad != 0)
             {
-                sb.AppendLine("UPDATE telefono");
+                sb.AppendLine("UPDATE telefono ");
                 sb.AppendLine("SET idUsuario=" + IdUsuario + ",numeroTelefono=" + Telefonos + ",estado='" + Estado + "', idPais=" + IdPais + ", idCiudad=" + IdCiudad + "");
-                sb.AppendLine("WHERE id=" + Id);
+                sb.AppendLine(" WHERE id=" + Id);
                 conexion.updateQuery(sb.ToString());
             }
             else
@@ -99,9 +101,7 @@ namespace Test_N_capas.Clases.Negocio
                 sb.AppendLine(" WHERE id="+Id+"");
 
                 conexion.updateQuery(sb.ToString());
-            }
-                
-            
+            }  
         }
 
         public void insert()
@@ -169,7 +169,6 @@ namespace Test_N_capas.Clases.Negocio
             sb.AppendLine("WHERE t.estado='Activo'");
             sb.AppendLine("ORDER BY t.id ASC");
 
-
             DataTable dt = conexion.getDataTable(sb.ToString());
             return dt;
         }
@@ -190,29 +189,6 @@ namespace Test_N_capas.Clases.Negocio
             sb.AppendLine("select id, nombre, correo from usuario");
             DataTable dt = conexion.getDataTable(sb.ToString());
             return dt;
-        }
-
-        public void addTelefono(int idUsuario, int numeroTelefono, string estado)
-        {
-            conexion.updateQuery("insert into telefono(idUsuario,numeroTelefono,estado) values("+idUsuario+","+numeroTelefono+",'"+estado+"')");
-
-        }
-
-        public void updateTelefono(int id, int idUsuario, int numeroTelefono, string estado)
-        {
-
-            conexion.updateQuery("update Telefono set idUsuario="+idUsuario+",numeroTelefono="+numeroTelefono+",estado='"+estado+"' where id="+id);
-        }
-
-        public void updateTelefonoExiste(int id, int idUsuario, string estado)
-        {
-
-            conexion.updateQuery("update Telefono set idUsuario=" + idUsuario +",estado='" + estado + "' where id=" + id);
-        }
-
-        public void updateEstado(int id, string estado)
-        {
-            conexion.updateQuery("update Telefono set estado='"+estado+"' where id="+id);
         }
 
         public DataTable getTelefonosTEST(int id)
