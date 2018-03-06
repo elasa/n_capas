@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Services;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Test_N_capas.Clases.Negocio;
@@ -17,6 +18,19 @@ namespace Test_N_capas
             {
                 load_gv();
             }
+        }
+
+        [WebMethod]
+        public static int telefonoExisteTest(int anexo)
+        {
+            Agenda agenda = new Agenda();
+
+            if (agenda.telefonoExiste(anexo) > 0)
+            {
+                return 1;
+            }
+
+            return 0;
         }
 
         protected void btn_editar_Click(object sender, EventArgs e)
@@ -139,6 +153,7 @@ namespace Test_N_capas
             string telefono = row.Cells[1].Text;
             hdnID.Value = id;
             lblTest.Text = telefono;
+
         }
 
         protected void btnEliminar_Click(object sender, EventArgs e)
@@ -181,6 +196,20 @@ namespace Test_N_capas
             Funciones.VisibilidadColumna(gv_index, 2, false);
             Funciones.VisibilidadColumna(gv_index, 4, false);
             Funciones.VisibilidadColumna(gv_index, 6, false);
+
+            //if (gv_index.Rows.Count > 0)
+            //{
+            //    //This replaces <td> with <th> and adds the scope attribute
+            //    gv_index.UseAccessibleHeader = true;
+
+            //    //This will add the <thead> and <tbody> elements
+            //    gv_index.HeaderRow.TableSection = TableRowSection.TableHeader;
+
+            //    //This adds the <tfoot> element. 
+            //    //Remove if you don't have a footer row
+            //    //gv_index.FooterRow.TableSection = TableRowSection.TableFooter;
+            //}
+
         }
 
         public void load_gv()
